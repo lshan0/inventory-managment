@@ -3,18 +3,18 @@ package com.bosch.coding.utils;
 import com.bosch.coding.enums.Update;
 
 public final class InventoryRequestEvent {
-    private final String fruit;
+    private final String productName;
     private final Integer quantity;
     private final Update command;
 
-    public InventoryRequestEvent(String fruit, Integer quantity, Update command) {
-        this.fruit = fruit;
+    public InventoryRequestEvent(String productName, Integer quantity, Update command) {
+        this.productName = productName;
         this.quantity = quantity;
         this.command = command;
     }
 
-    public String getFruit() {
-        return fruit;
+    public String getProductName() {
+        return productName;
     }
 
     public Integer getQuantity() {
@@ -27,8 +27,8 @@ public final class InventoryRequestEvent {
 
     @Override
     public String toString() {
-        return "WarehouseRequestEvent{" +
-                "fruit='" + fruit + '\'' +
+        return "InventoryRequestEvent{" +
+                "productName='" + productName + '\'' +
                 ", quantity=" + quantity +
                 ", command='" + command + '\'' +
                 '}';

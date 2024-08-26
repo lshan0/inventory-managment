@@ -1,4 +1,10 @@
-com\bosch\coding\Consumer$1.class
+com\bosch\coding\exceptions\InsufficientStockException.class
 com\bosch\coding\Services\InventoryService.class
-com\bosch\coding\Consumer.class
+com\bosch\coding\dto\InventoryRequest.class
 com\bosch\coding\Repositories\InventoryRepository.class
+com\bosch\coding\exceptions\ProductNotFoundException.class
+com\bosch\coding\Services\InventoryService$1.class
+com\bosch\coding\Repositories\FruitInventoryRepository.class
+com\bosch\coding\exceptions\InvalidInventoryRequestException.class
+com\bosch\coding\FruitConsumer.class
+com\bosch\coding\dto\InventoryResponse.class

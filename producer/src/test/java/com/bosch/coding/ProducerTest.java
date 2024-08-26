@@ -13,7 +13,7 @@ public class ProducerTest {
     @Test
     public void testWarehouseRequestEvent() {
         InventoryRequestEvent event = new InventoryRequestEvent("apples", 5, Update.ADD);
-        assertEquals("apples", event.getFruit());
+        assertEquals("apples", event.getProductName());
         assertEquals(5, event.getQuantity());
         assertEquals(Update.ADD, event.getCommand());
     }
@@ -23,7 +23,7 @@ public class ProducerTest {
         InventoryRequestEventFactory factory = new InventoryRequestEventFactory();
         InventoryRequestEvent event = factory.createEvent();
         assertNotNull(event);
-        assertNotNull(event.getFruit());
+        assertNotNull(event.getProductName());
         assertNotNull(event.getCommand());
         assertTrue(event.getQuantity() >= 0 && event.getQuantity() < 10);
     }

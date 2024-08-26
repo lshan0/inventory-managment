@@ -6,6 +6,7 @@ import com.bosch.coding.Services.InventoryService;
 import com.bosch.coding.dto.InventoryRequest;
 import com.bosch.coding.utils.RabbitMQConnectionUtil;
 import com.bosch.coding.utils.InventoryRequestEventFactory;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.*;
 import java.io.IOException;
@@ -26,19 +27,30 @@ public class FruitConsumer extends DefaultConsumer{
 
     @Override
     public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
-        InventoryRequest request = objectMapper.readValue(body, InventoryRequest.class);
-        String queue = envelope.getRoutingKey();
+        InventoryRequest request;
+        try {
+            request = objectMapper.readValue(body, InventoryRequest.class);
+        } catch (JsonProcessingException e) {
+            System.err.println("Failed to parse message: " + e.getMessage());
+            // Reject the message and not requeue
+            getChannel().basicReject(envelope.getDeliveryTag(), false);
+            return;
+        }
 
+        String queue = envelope.getRoutingKey();
         System.out.println(" [x] Received '" + request.toString() + "' from " + queue + "_queue");
 
         // Process the message based on the queue
         try {
             inventoryService.processRequest(request);
+            getChannel().basicAck(envelope.getDeliveryTag(), false);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            System.err.println("Database error during processing: " + e.getMessage());
+            getChannel().basicReject(envelope.getDeliveryTag(), false);
+        } catch (Exception e) {
+            System.err.println("Unexpected error: " + e.getMessage());
+            getChannel().basicReject(envelope.getDeliveryTag(), false);
         }
-        // Acknowledge the message
-        getChannel().basicAck(envelope.getDeliveryTag(), false);
     }
 
     public static void main(String[] args) throws IOException, TimeoutException, InterruptedException {

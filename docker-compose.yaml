@@ -25,23 +25,23 @@ services:
       - "5672:5672"
       - "15672:15672"
 
-  event_producer:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: openjdk:17
-    environment:
-      - JAR_FILE=producer/target/producer-1.0-SNAPSHOT.jar
-    depends_on:
-      - rabbitmq
-
-  event_consumer:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: openjdk:17
-    environment:
-      - JAR_FILE=consumer/target/consumer-1.0-SNAPSHOT.jar
-    depends_on:
-      - rabbitmq
-      - postgres
+#  event_producer:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    image: openjdk:17
+#    environment:
+#      - JAR_FILE=producer/target/producer-1.0-SNAPSHOT.jar
+#    depends_on:
+#      - rabbitmq
+#
+#  event_consumer:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    image: openjdk:17
+#    environment:
+#      - JAR_FILE=consumer/target/consumer-1.0-SNAPSHOT.jar
+#    depends_on:
+#      - rabbitmq
+#      - postgres

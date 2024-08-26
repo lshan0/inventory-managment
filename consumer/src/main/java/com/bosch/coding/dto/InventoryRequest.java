@@ -6,7 +6,7 @@ public record InventoryRequest(String productName, Integer quantity, Update comm
 
     @Override
     public String toString() {
-        return "WarehouseRequestEvent{" +
+        return "InventoryRequestEvent{" +
                 "fruit='" + productName + '\'' +
                 ", quantity=" + quantity +
                 ", command='" + command + '\'' +

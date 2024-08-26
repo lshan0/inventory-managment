@@ -4,6 +4,9 @@ import com.bosch.coding.Repositories.InventoryRepository;
 import com.bosch.coding.dto.InventoryRequest;
 import com.bosch.coding.dto.InventoryResponse;
 import com.bosch.coding.enums.Update;
+import com.bosch.coding.exceptions.InsufficientStockException;
+import com.bosch.coding.exceptions.InvalidInventoryRequestException;
+import com.bosch.coding.exceptions.ProductNotFoundException;
 
 import java.sql.SQLException;
 import java.util.Optional;
@@ -17,22 +20,49 @@ public class InventoryService {
     }
 
     public void processRequest(InventoryRequest request) throws SQLException {
-        if (request.productName() == null || request.productName().isEmpty()) {
-            throw new RuntimeException("Invalid product name");
-        }
         Update command = request.command();
         String productName = request.productName();
         int quantity = request.quantity();
 
-        switch (command) {
-            case ADD -> {
-                Optional<InventoryResponse> currentStock = inventoryRepository.getInventoryByProductName(request);
-                if (currentStock.isEmpty())
-            }
-            case REMOVE -> {
-
-            }
-            default -> throw new RuntimeException("Invalid Inventory Operation");
+        if (productName == null || productName.isEmpty()) {
+            System.out.println("Invalid Product Name: " + productName);
+            throw new InvalidInventoryRequestException("Invalid product name");
         }
+
+        try {
+            switch (command) {
+                case ADD -> handleAddCommand(productName, quantity);
+                case REMOVE -> handleRemoveCommand(productName, quantity);
+                default -> throw new InvalidInventoryRequestException("Operation does not exist");
+            }
+        } catch (SQLException e) {
+            System.out.println("Database error occured:");
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    private void handleAddCommand(String productName, int quantity) throws SQLException {
+        Optional<InventoryResponse> currentStock = inventoryRepository.getInventoryByProductName(productName);
+        if (currentStock.isEmpty()) {
+            inventoryRepository.addInventory(new InventoryRequest(productName, quantity, Update.ADD));
+        } else {
+            int newStock = currentStock.get().quantity() + quantity;
+            inventoryRepository.updateInventory(new InventoryRequest(productName, newStock, Update.ADD));
+        }
+    }
+
+    private void handleRemoveCommand(String productName, int quantity) throws SQLException {
+        Optional<InventoryResponse> currentStock = inventoryRepository.getInventoryByProductName(productName);
+        if (currentStock.isEmpty()) {
+            throw new ProductNotFoundException("Product does not exist");
+        }
+
+        int newStock = currentStock.get().quantity() - quantity;
+        if (newStock < 0) {
+            throw new InsufficientStockException("Not enough stock available");
+        }
+
+        inventoryRepository.updateInventory(new InventoryRequest(productName, newStock, Update.REMOVE));
     }
 }

@@ -1,4 +1,5 @@
 com\bosch\coding\enums\Update.class
+com\bosch\coding\utils\DBConnectionUtil.class
 com\bosch\coding\utils\RabbitMQConnectionUtil.class
 com\bosch\coding\utils\InventoryRequestEvent.class
 com\bosch\coding\utils\InventoryRequestEventFactory.class

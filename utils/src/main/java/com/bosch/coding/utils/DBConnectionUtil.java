@@ -8,13 +8,14 @@ public class DBConnectionUtil {
     private static DBConnectionUtil instance;
     private final Connection connection;
 
-    private static final String URL = "jdbc:postgresql://localhost:5432/inventory_management"; // Replace with your actual database URL
-    private static final String USER = "bosch"; // Replace with your actual database username
-    private static final String PASSWORD = "very_secret"; // Replace with your actual database password
+    private static final String URL = "jdbc:postgresql://localhost:5432/inventory_management";
+    private static final String USER = System.getenv("username");
+    private static final String PASSWORD = System.getenv("password");
 
     private DBConnectionUtil() throws SQLException {
         try {
             this.connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            System.out.println("connection successfull");
         } catch (SQLException e) {
             throw new SQLException("Failed to create the database connection.", e);
         }

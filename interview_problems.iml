@@ -124,6 +124,8 @@
       <excludeFolder url="file://$MODULE_DIR$/rabbitmq_data/mnesia/rabbit@f9de90a65fad/coordination/rabbit@f9de90a65fad/RABBITCAGRB7X5GNSC/checkpoints" />
       <excludeFolder url="file://$MODULE_DIR$/rabbitmq_data/mnesia/rabbit@f9de90a65fad/coordination/rabbit@f9de90a65fad/RABBITCAGRB7X5GNSC/snapshots" />
       <excludeFolder url="file://$MODULE_DIR$/rabbitmq_logs" />
+      <excludeFolder url="file://$MODULE_DIR$/rabbitmq_data/mnesia/rabbit@58a01f31f297" />
+      <excludeFolder url="file://$MODULE_DIR$/rabbitmq_data/mnesia/rabbit@58a01f31f297-plugins-expand" />
     </content>
   </component>
 </module>

@@ -17,7 +17,7 @@ public interface InventoryRepository {
 
     Optional<List<InventoryResponse>> getAllInventories() throws SQLException;
 
-    Optional<InventoryResponse> getInventoryByProductName(InventoryRequest request) throws SQLException;
+    Optional<InventoryResponse> getInventoryByProductName(String productName) throws SQLException;
 
-    void deleteInventory(int id) throws SQLException;
+    void deleteInventoryByProductName(String productName) throws SQLException;
 }

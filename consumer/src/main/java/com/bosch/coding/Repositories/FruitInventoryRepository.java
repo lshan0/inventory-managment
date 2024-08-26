@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class FruitInventoryRepository implements InventoryRepository {
+
     @Override
     public void addInventory(InventoryRequest inventoryRequest) throws SQLException {
         String sql = "INSERT INTO inventory (product_name, quantity) VALUES (?, ?)";
@@ -24,12 +25,6 @@ public class FruitInventoryRepository implements InventoryRepository {
             preparedStatement.setInt(2, inventoryRequest.quantity());
 
             preparedStatement.executeUpdate();
-
-        } catch (SQLException e) {
-            // Log the exception with details
-            System.err.println("Failed to execute query: " + sql);
-            e.printStackTrace(); // Print the stack trace for debugging
-            throw e; // Rethrow exception to handle it in the service layer
         }
     }
 
@@ -43,17 +38,7 @@ public class FruitInventoryRepository implements InventoryRepository {
             preparedStatement.setInt(1, inventoryRequest.quantity());
             preparedStatement.setString(2, inventoryRequest.productName());
 
-            int rowsAffected = preparedStatement.executeUpdate();
-            if (rowsAffected == 0) {
-                // Handle the case where no rows were updated (e.g., product not found)
-                System.err.println("No inventory record found for product: " + inventoryRequest.productName());
-            }
-
-        } catch (SQLException e) {
-            // Log the exception with details
-            System.err.println("Failed to execute query: " + sql);
-            e.printStackTrace(); // Print the stack trace for debugging
-            throw e; // Rethrow exception to handle it in the service layer
+            preparedStatement.executeUpdate();
         }
     }
 
@@ -75,12 +60,6 @@ public class FruitInventoryRepository implements InventoryRepository {
                     return Optional.empty(); // Record not found
                 }
             }
-
-        } catch (SQLException e) {
-            // Log the exception with details
-            System.err.println("Failed to execute query: " + sql);
-            e.printStackTrace(); // Print the stack trace for debugging
-            return Optional.empty(); // Return an empty Optional in case of an error
         }
     }
 
@@ -98,25 +77,18 @@ public class FruitInventoryRepository implements InventoryRepository {
                 int quantity = resultSet.getInt("quantity");
                 inventories.add(new InventoryResponse(name, quantity));
             }
-
             return Optional.of(inventories);
-
-        } catch (SQLException e) {
-            // Log the exception with details
-            System.err.println("Failed to execute query: " + sql);
-            e.printStackTrace(); // Print the stack trace for debugging
-            return Optional.empty(); // Return an empty Optional in case of an error
         }
     }
 
     @Override
-    public Optional<InventoryResponse> getInventoryByProductName(InventoryRequest request) throws SQLException {
+    public Optional<InventoryResponse> getInventoryByProductName(String productName) throws SQLException {
         String sql = "SELECT product_name, quantity FROM inventory WHERE product_name = ?";
 
         try (Connection connection = DBConnectionUtil.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
-            preparedStatement.setString(1, request.productName());
+            preparedStatement.setString(1, productName);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
@@ -127,17 +99,18 @@ public class FruitInventoryRepository implements InventoryRepository {
                     return Optional.empty(); // Product not found
                 }
             }
-
-        } catch (SQLException e) {
-            // Log the exception with details
-            System.err.println("Failed to execute query: " + sql);
-            e.printStackTrace(); // Print the stack trace for debugging
-            return Optional.empty();
         }
     }
 
     @Override
-    public void deleteInventory(int id) throws SQLException {
+    public void deleteInventoryByProductName(String productName) throws SQLException {
+        String sql = "DELETE FROM inventory WHERE product_name = ?";
 
+        try (Connection connection = DBConnectionUtil.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, productName);
+            preparedStatement.executeUpdate();
+        }
     }
 }
