@@ -1,1 +1,4 @@
 .idea
+rabbitmq_data/
+rabbitmq_logs/
+postgres_orchestrator_data/

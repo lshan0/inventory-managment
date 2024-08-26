@@ -1,6 +1,5 @@
-version: '3'
 services:
-  postgres-orchestrator:
+  postgres:
     image: postgres:15
     container_name: postgres-container-orchestrator
     environment:
@@ -27,18 +26,22 @@ services:
       - "15672:15672"
 
   event_producer:
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: openjdk:17
-    volumes:
-      - ./producer:/app working_dir:/app
-    command: java -jar event_publisher.jar
+    environment:
+      - JAR_FILE=producer/target/producer-1.0-SNAPSHOT.jar
     depends_on:
       - rabbitmq
 
   event_consumer:
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: openjdk:17
-    volumes:
-      - ./consumer:/app working_dir:/app
-    command: java -jar event_consumer.jar
+    environment:
+      - JAR_FILE=consumer/target/consumer-1.0-SNAPSHOT.jar
     depends_on:
       - rabbitmq
       - postgres

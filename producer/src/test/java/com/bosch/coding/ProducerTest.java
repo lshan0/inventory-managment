@@ -1,24 +1,27 @@
 package com.bosch.coding;
 
+import com.bosch.coding.enums.Update;
+import com.bosch.coding.utils.InventoryRequestEvent;
+import com.bosch.coding.utils.InventoryRequestEventFactory;
 import org.junit.jupiter.api.Test;
 
+
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 public class ProducerTest {
 
     @Test
     public void testWarehouseRequestEvent() {
-        Producer.WarehouseRequestEvent event = new Producer().new WarehouseRequestEvent("apples", 5, "add");
+        InventoryRequestEvent event = new InventoryRequestEvent("apples", 5, Update.ADD);
         assertEquals("apples", event.getFruit());
         assertEquals(5, event.getQuantity());
-        assertEquals("add", event.getCommand());
+        assertEquals(Update.ADD, event.getCommand());
     }
 
     @Test
     public void testWarehouseRequestEventFactory() {
-        Producer.WarehouseRequestEventFactory factory = new Producer().new WarehouseRequestEventFactory();
-        Producer.WarehouseRequestEvent event = factory.createEvent();
+        InventoryRequestEventFactory factory = new InventoryRequestEventFactory();
+        InventoryRequestEvent event = factory.createEvent();
         assertNotNull(event);
         assertNotNull(event.getFruit());
         assertNotNull(event.getCommand());
