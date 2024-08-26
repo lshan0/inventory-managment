@@ -55,12 +55,12 @@ public class InventoryService {
     private void handleRemoveCommand(String productName, int quantity) throws SQLException {
         Optional<InventoryResponse> currentStock = inventoryRepository.getInventoryByProductName(productName);
         if (currentStock.isEmpty()) {
-            throw new ProductNotFoundException("Product does not exist");
+            throw new ProductNotFoundException("Cannot remove " + productName + " .Product does not exist");
         }
 
         int newStock = currentStock.get().quantity() - quantity;
         if (newStock < 0) {
-            throw new InsufficientStockException("Not enough stock available");
+            throw new InsufficientStockException("Not enough stock available for product = " + productName + " quantity needed = " + quantity);
         }
 
         inventoryRepository.updateInventory(new InventoryRequest(productName, newStock, Update.REMOVE));

@@ -18,7 +18,7 @@ public class FruitInventoryRepository implements InventoryRepository {
     public void addInventory(InventoryRequest inventoryRequest) throws SQLException {
         String sql = "INSERT INTO inventory (product_name, quantity) VALUES (?, ?)";
 
-        try (Connection connection = DBConnectionUtil.getInstance().getConnection();
+        try (Connection connection = DBConnectionUtil.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
             preparedStatement.setString(1, inventoryRequest.productName());
@@ -32,7 +32,7 @@ public class FruitInventoryRepository implements InventoryRepository {
     public void updateInventory(InventoryRequest inventoryRequest) throws SQLException {
         String sql = "UPDATE inventory SET quantity = ? WHERE product_name = ?";
 
-        try (Connection connection = DBConnectionUtil.getInstance().getConnection();
+        try (Connection connection = DBConnectionUtil.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
             preparedStatement.setInt(1, inventoryRequest.quantity());
@@ -46,7 +46,7 @@ public class FruitInventoryRepository implements InventoryRepository {
     public Optional<InventoryResponse> getInventoryById(int id) throws SQLException {
         String sql = "SELECT product_name, quantity FROM inventory WHERE id = ?";
 
-        try (Connection connection = DBConnectionUtil.getInstance().getConnection();
+        try (Connection connection = DBConnectionUtil.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
             preparedStatement.setInt(1, id);
@@ -68,7 +68,7 @@ public class FruitInventoryRepository implements InventoryRepository {
         String sql = "SELECT product_name, quantity FROM inventory";
         List<InventoryResponse> inventories = new ArrayList<>();
 
-        try (Connection connection = DBConnectionUtil.getInstance().getConnection();
+        try (Connection connection = DBConnectionUtil.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql);
              ResultSet resultSet = preparedStatement.executeQuery()) {
 
@@ -85,7 +85,7 @@ public class FruitInventoryRepository implements InventoryRepository {
     public Optional<InventoryResponse> getInventoryByProductName(String productName) throws SQLException {
         String sql = "SELECT product_name, quantity FROM inventory WHERE product_name = ?";
 
-        try (Connection connection = DBConnectionUtil.getInstance().getConnection();
+        try (Connection connection = DBConnectionUtil.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
             preparedStatement.setString(1, productName);
@@ -106,7 +106,7 @@ public class FruitInventoryRepository implements InventoryRepository {
     public void deleteInventoryByProductName(String productName) throws SQLException {
         String sql = "DELETE FROM inventory WHERE product_name = ?";
 
-        try (Connection connection = DBConnectionUtil.getInstance().getConnection();
+        try (Connection connection = DBConnectionUtil.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
             preparedStatement.setString(1, productName);

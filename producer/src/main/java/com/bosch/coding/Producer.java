@@ -45,10 +45,9 @@ public class Producer {
                 String message = objectMapper.writeValueAsString(event);
                 channel.basicPublish(EXCHANGE_NAME, routingKey, null, message.getBytes(StandardCharsets.UTF_8));
 
-                System.out.println(" [x] Sent '" + message + "' to " + event.getProductName() + "_queue with routing key " + routingKey);
-                // Slow down the event generation
+                logger.info("Sent '{}' to {}_queue with routing key {}", message, event.getProductName(), routingKey);
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(100); // slow
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }

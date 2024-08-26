@@ -9,6 +9,9 @@ import com.bosch.coding.utils.InventoryRequestEventFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.concurrent.TimeoutException;
@@ -16,8 +19,10 @@ import java.util.concurrent.TimeoutException;
 public class FruitConsumer extends DefaultConsumer{
 
     InventoryService inventoryService;
+
     private static final String EXCHANGE_NAME = "fruit_exchange";
     private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final Logger logger = LoggerFactory.getLogger(FruitConsumer.class);
 
     // Constructs a new instance and records its association to the passed-in channel.
     public FruitConsumer(Channel channel, InventoryService inventoryService) {
