@@ -5,7 +5,7 @@ import com.bosch.coding.enums.Update;
 import java.util.Random;
 
 public class InventoryRequestEventFactory {
-    private static final String[] fruits = {"Apples", "Bananas", "Coconuts", "Dates", "Elderberries"};
+    private static final String[] fruits = {"Apples", "Bananas", "Coconuts", "Dates", "Elderberries, Fig, grape, Honeydew, Pear, Orange"};
     private static Random RANDOM = new Random();
 
     public InventoryRequestEvent createEvent() {

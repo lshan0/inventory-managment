@@ -1,4 +1,4 @@
-package com.bosch.coding.Repositories;
+package com.bosch.coding.repositories;
 
 import com.bosch.coding.dto.InventoryRequest;
 import com.bosch.coding.dto.InventoryResponse;

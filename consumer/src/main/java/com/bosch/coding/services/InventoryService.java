@@ -1,6 +1,6 @@
-package com.bosch.coding.Services;
+package com.bosch.coding.services;
 
-import com.bosch.coding.Repositories.InventoryRepository;
+import com.bosch.coding.repositories.InventoryRepository;
 import com.bosch.coding.dto.InventoryRequest;
 import com.bosch.coding.dto.InventoryResponse;
 import com.bosch.coding.enums.Update;

@@ -1,11 +1,10 @@
 package com.bosch.coding;
 
-import com.bosch.coding.Repositories.FruitInventoryRepository;
-import com.bosch.coding.Repositories.InventoryRepository;
-import com.bosch.coding.Services.InventoryService;
+import com.bosch.coding.repositories.FruitInventoryRepository;
+import com.bosch.coding.repositories.InventoryRepository;
+import com.bosch.coding.services.InventoryService;
 import com.bosch.coding.dto.InventoryRequest;
 import com.bosch.coding.utils.RabbitMQConnectionUtil;
-import com.bosch.coding.utils.InventoryRequestEventFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.*;

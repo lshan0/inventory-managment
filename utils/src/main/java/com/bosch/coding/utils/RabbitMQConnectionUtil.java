@@ -13,6 +13,9 @@ public class RabbitMQConnectionUtil {
     private static final String USERNAME = System.getenv("USERNAME");
     private static final String PASSWORD = System.getenv("PASSWORD");
 
+    private static final int CONNECTION_ATTEMPT_COUNT = 10;
+    private static final int RETRY_COOLDOWN = 10000;
+
     public static Connection establishConnection() {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost(HOST);
@@ -22,13 +25,13 @@ public class RabbitMQConnectionUtil {
 
         Connection connection = null;
         int attempts = 0;
-        while (connection == null && attempts < 10) {
+        while (connection == null && attempts < CONNECTION_ATTEMPT_COUNT) {
             try {
                 connection = factory.newConnection();
             } catch (IOException | TimeoutException e) {
                 attempts++;
                 try {
-                    Thread.sleep(10000); // Wait 10 seconds before retrying
+                    Thread.sleep(RETRY_COOLDOWN); // Wait 10 seconds before retrying
                 } catch (InterruptedException ie) {
                     Thread.currentThread().interrupt();
                 }
