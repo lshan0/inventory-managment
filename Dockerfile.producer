@@ -1,6 +1,9 @@
 # Dockerfile.producer
 FROM openjdk:17
-COPY producer/target/producer-1.0-SNAPSHOT.jar /app/producer.jar
+
 WORKDIR /app
-CMD ["java", "-jar", "producer.jar"]
+
+COPY producer/target/producer-1.0-SNAPSHOT.jar /app/producer.jar
+
+ENTRYPOINT ["java", "-cp", "/app/producer.jar", "com.bosch.coding.Producer"]
 

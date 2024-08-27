@@ -28,15 +28,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.producer
-      args:
-        JAR_FILE: producer/target/producer-1.0-SNAPSHOT.jar
     depends_on:
       - rabbitmq
     environment:
-      host: rabbitmq
-      port: 5672
-      username: bosch
-      password: very_secret
+      HOST: rabbitmq
+      PORT: 5672
+      USERNAME: bosch
+      PASSWORD: very_secret
 
   event_consumer:
     build:
@@ -44,10 +42,11 @@ services:
       dockerfile: Dockerfile.consumer
     image: openjdk:17
     environment:
-      JAR_FILE: consumer/target/consumer-1.0-SNAPSHOT.jar
-      port: 5672
-      username: bosch
-      password: very_secret
+      HOST: rabbitmq
+      PORT: 5672
+      USERNAME: bosch
+      PASSWORD: very_secret
+      JDBC_URL: jdbc:postgresql://postgres:5432/inventory_management
     depends_on:
       - rabbitmq
       - postgres

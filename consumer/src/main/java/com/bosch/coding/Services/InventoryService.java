@@ -7,12 +7,16 @@ import com.bosch.coding.enums.Update;
 import com.bosch.coding.exceptions.InsufficientStockException;
 import com.bosch.coding.exceptions.InvalidInventoryRequestException;
 import com.bosch.coding.exceptions.ProductNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 import java.util.Optional;
 
+// singleton
 public class InventoryService {
 
+    private static final Logger logger = LoggerFactory.getLogger(InventoryService.class);
     InventoryRepository inventoryRepository;
 
     public InventoryService(InventoryRepository inventoryRepository) {
@@ -25,7 +29,7 @@ public class InventoryService {
         int quantity = request.quantity();
 
         if (productName == null || productName.isEmpty()) {
-            System.out.println("Invalid Product Name: " + productName);
+            logger.error("Invalid Product Name: {}", productName);
             throw new InvalidInventoryRequestException("Invalid product name");
         }
 
@@ -36,7 +40,7 @@ public class InventoryService {
                 default -> throw new InvalidInventoryRequestException("Operation does not exist");
             }
         } catch (SQLException e) {
-            System.out.println("Database error occured:");
+            logger.error("Database error occured:");
             e.printStackTrace();
             throw e;
         }

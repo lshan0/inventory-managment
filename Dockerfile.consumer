@@ -1,4 +1,4 @@
 FROM openjdk:17
 COPY consumer/target/consumer-1.0-SNAPSHOT.jar /app/consumer.jar
 WORKDIR /app
-CMD ["java", "-jar", "consumer.jar"]
+ENTRYPOINT ["java", "-cp", "/app/consumer.jar", "com.bosch.coding.FruitConsumer"]

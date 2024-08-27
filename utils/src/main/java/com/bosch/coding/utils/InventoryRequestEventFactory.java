@@ -19,3 +19,6 @@ public class InventoryRequestEventFactory {
         return fruits;
     }
 }
+
+//builder
+//Request's builder pattern

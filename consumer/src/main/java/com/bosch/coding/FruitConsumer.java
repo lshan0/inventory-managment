@@ -21,9 +21,12 @@ public class FruitConsumer extends DefaultConsumer{
 
     InventoryService inventoryService;
 
-    private static final String EXCHANGE_NAME = "fruit_exchange";
-    private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final Logger logger = LoggerFactory.getLogger(FruitConsumer.class);
+    private static final String EXCHANGE_NAME = "fruits_exchange";
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final String ROUTING_KEY = "fruits_key";
+    private static final String QUEUE_NAME = "fruits_queue";
+    private static final String QUEUE_TYPE = "direct";
 
     // Constructs a new instance and records its association to the passed-in channel.
     public FruitConsumer(Channel channel, InventoryService inventoryService) {
@@ -44,7 +47,7 @@ public class FruitConsumer extends DefaultConsumer{
         }
 
         String queue = envelope.getRoutingKey();
-        System.out.println(" [x] Received '" + request.toString() + "' from " + queue + "_queue");
+        logger.info("Received {} from '{}'", request.toString(), QUEUE_NAME);
 
         // Process the message based on the queue
         try {
@@ -60,29 +63,19 @@ public class FruitConsumer extends DefaultConsumer{
     }
 
     public static void main(String[] args) throws IOException, TimeoutException, InterruptedException {
-        System.out.println("Sleeping");
-        Thread.sleep(50000);
+        logger.info("Starting Fruit Consumer");
         final InventoryRepository inventoryRepository = new FruitInventoryRepository();
         final InventoryService inventoryService = new InventoryService(inventoryRepository);
 
-        final String[] fruits = InventoryRequestEventFactory.getFruits();
-
         try (Connection connection = RabbitMQConnectionUtil.establishConnection();
              final Channel channel = connection.createChannel()) {
-            System.out.println("Connection Successful");
-            channel.exchangeDeclare(EXCHANGE_NAME, "direct", true);
 
-            // Declare queues and bind them to the exchange based on the fruit type
-            for (final String fruit : fruits) {
-                final String queueName = fruit + "_queue";
-                channel.queueDeclare(queueName, true, false, false, null);
-                channel.queueBind(queueName, EXCHANGE_NAME, queueName.replace("_queue", "_key"));
-            }
+            // Declare the exchange, queue and bind them using a routing key
+            channel.exchangeDeclare(EXCHANGE_NAME, QUEUE_TYPE, true);
+            channel.queueDeclare(QUEUE_NAME, true, false, false, null);
+            channel.queueBind(QUEUE_NAME, EXCHANGE_NAME, ROUTING_KEY);
 
-            // Create a FruitConsumer for each queue
-            for (final String fruit : fruits) {
-                channel.basicConsume(fruit + "_queue", false, new FruitConsumer(channel, inventoryService));
-            }
+            channel.basicConsume(QUEUE_NAME, false, new FruitConsumer(channel, inventoryService));
 
             // Keep the application running
             while (true) {

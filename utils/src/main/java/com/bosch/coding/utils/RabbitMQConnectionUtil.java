@@ -8,10 +8,10 @@ import java.util.concurrent.TimeoutException;
 
 public class RabbitMQConnectionUtil {
 
-    private static final String HOST = System.getenv("host");
-    private static final String PORT = System.getenv("port");
-    private static final String USERNAME = System.getenv("username");
-    private static final String PASSWORD = System.getenv("password");
+    private static final String HOST = System.getenv("HOST");
+    private static final String PORT = System.getenv("PORT");
+    private static final String USERNAME = System.getenv("USERNAME");
+    private static final String PASSWORD = System.getenv("PASSWORD");
 
     public static Connection establishConnection() {
         ConnectionFactory factory = new ConnectionFactory();
@@ -28,8 +28,7 @@ public class RabbitMQConnectionUtil {
             } catch (IOException | TimeoutException e) {
                 attempts++;
                 try {
-                    e.printStackTrace();
-                    Thread.sleep(10000); // Wait 5 seconds before retrying
+                    Thread.sleep(10000); // Wait 10 seconds before retrying
                 } catch (InterruptedException ie) {
                     Thread.currentThread().interrupt();
                 }
