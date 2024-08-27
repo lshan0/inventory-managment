@@ -24,24 +24,30 @@ services:
       - "5672:5672"
       - "15672:15672"
 
-#  event_producer:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    image: openjdk:17
-#    environment:
-#      - JAR_FILE=producer/target/producer-1.0-SNAPSHOT.jar
-#    depends_on:
-#      - rabbitmq
+  event_producer:
+    build:
+      context: .
+      dockerfile: Dockerfile.producer
+      args:
+        JAR_FILE: producer/target/producer-1.0-SNAPSHOT.jar
+    depends_on:
+      - rabbitmq
+    environment:
+      host: rabbitmq
+      port: 5672
+      username: bosch
+      password: very_secret
 
   event_consumer:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.consumer
     image: openjdk:17
     environment:
-      - JAR_FILE=consumer/target/consumer-1.0-SNAPSHOT.jar
+      JAR_FILE: consumer/target/consumer-1.0-SNAPSHOT.jar
+      port: 5672
+      username: bosch
+      password: very_secret
     depends_on:
       - rabbitmq
       - postgres
-    command: ["java", "-jar", "/app/consumer.jar"]

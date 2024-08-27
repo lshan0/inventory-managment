@@ -1,21 +1,44 @@
 package com.bosch.coding.utils;
 
+import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+
+import java.io.IOException;
+import java.util.concurrent.TimeoutException;
 
 public class RabbitMQConnectionUtil {
 
-    private static final String HOSTNAME = System.getenv("hostname");
+    private static final String HOST = System.getenv("host");
     private static final String PORT = System.getenv("port");
     private static final String USERNAME = System.getenv("username");
     private static final String PASSWORD = System.getenv("password");
 
-    public static ConnectionFactory establishConnection() {
+    public static Connection establishConnection() {
         ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost(HOSTNAME);
+        factory.setHost(HOST);
         factory.setPort(Integer.parseInt(PORT));
         factory.setUsername(USERNAME);
         factory.setPassword(PASSWORD);
 
-        return factory;
+        Connection connection = null;
+        int attempts = 0;
+        while (connection == null && attempts < 10) {
+            try {
+                connection = factory.newConnection();
+            } catch (IOException | TimeoutException e) {
+                attempts++;
+                try {
+                    e.printStackTrace();
+                    Thread.sleep(10000); // Wait 5 seconds before retrying
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        }
+
+        if (connection == null) {
+            throw new RuntimeException("Failed to connect to RabbitMQ after several attempts.");
+        }
+        return connection;
     }
 }

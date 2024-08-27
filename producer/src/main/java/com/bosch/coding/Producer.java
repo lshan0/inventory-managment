@@ -5,7 +5,6 @@ import com.bosch.coding.utils.InventoryRequestEvent;
 import com.bosch.coding.utils.InventoryRequestEventFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,11 +18,10 @@ public class Producer {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public static void main(String[] args) {
+        System.out.println("Starting");
         InventoryRequestEventFactory factory = new InventoryRequestEventFactory();
-        // Setup RabbitMQ connection
-        ConnectionFactory rabbitMQConnection = RabbitMQConnectionUtil.establishConnection();
 
-        try (Connection connection = rabbitMQConnection.newConnection();
+        try (Connection connection = RabbitMQConnectionUtil.establishConnection();
              Channel channel = connection.createChannel()) {
 
             // Declare the exchange

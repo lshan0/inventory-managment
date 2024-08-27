@@ -9,6 +9,7 @@ import com.bosch.coding.utils.InventoryRequestEventFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.*;
+import com.rabbitmq.client.DefaultConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,14 +60,16 @@ public class FruitConsumer extends DefaultConsumer{
     }
 
     public static void main(String[] args) throws IOException, TimeoutException, InterruptedException {
+        System.out.println("Sleeping");
+        Thread.sleep(50000);
         final InventoryRepository inventoryRepository = new FruitInventoryRepository();
         final InventoryService inventoryService = new InventoryService(inventoryRepository);
 
-        final ConnectionFactory rabbitMQConnection = RabbitMQConnectionUtil.establishConnection();
         final String[] fruits = InventoryRequestEventFactory.getFruits();
 
-        try (Connection connection = rabbitMQConnection.newConnection();
+        try (Connection connection = RabbitMQConnectionUtil.establishConnection();
              final Channel channel = connection.createChannel()) {
+            System.out.println("Connection Successful");
             channel.exchangeDeclare(EXCHANGE_NAME, "direct", true);
 
             // Declare queues and bind them to the exchange based on the fruit type
