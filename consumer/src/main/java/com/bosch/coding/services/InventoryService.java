@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import java.sql.SQLException;
 import java.util.Optional;
 
-// singleton
 public class InventoryService {
 
     private static final Logger logger = LoggerFactory.getLogger(InventoryService.class);

@@ -9,15 +9,18 @@ public class DBConnectionUtil {
     private static final String USERNAME = System.getenv("USERNAME");
     private static final String PASSWORD = System.getenv("PASSWORD");
     private static final String JDBC_URL = System.getenv("JDBC_URL");
+    private static final int MAX_POOL_SIZE = 10;
+    private static final int TIMEOUT_DURATION = 30000;
+    private static final int IDLE_TIMEOUT = 600000;
 
     static {
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl(JDBC_URL);
         config.setUsername(USERNAME);
         config.setPassword(PASSWORD);
-        config.setMaximumPoolSize(10); // Adjust based on your needs
-        config.setConnectionTimeout(30000); // Adjust based on your needs
-        config.setIdleTimeout(600000); // Adjust based on your needs
+        config.setMaximumPoolSize(MAX_POOL_SIZE);
+        config.setConnectionTimeout(TIMEOUT_DURATION);
+        config.setIdleTimeout(IDLE_TIMEOUT);
 
         dataSource = new HikariDataSource(config);
     }
