@@ -1,4 +1,13 @@
+# Dockerfile.consumer
+
+# Stage 1: Build the project
+FROM maven:3.8.6-eclipse-temurin-17 AS build
+WORKDIR /app
+COPY . .
+RUN mvn clean package
+
+# Stage 2: Run the JAR file
 FROM openjdk:17
-COPY consumer/target/consumer-1.0-SNAPSHOT.jar /app/consumer.jar
+COPY --from=build /app/consumer/target/consumer-1.0-SNAPSHOT.jar /app/consumer.jar
 WORKDIR /app
 ENTRYPOINT ["java", "-cp", "/app/consumer.jar", "com.bosch.coding.FruitConsumer"]

@@ -1,9 +1,14 @@
 # Dockerfile.producer
-FROM openjdk:17
 
+# Stage 1: Build the project
+FROM maven:3.8.6-eclipse-temurin-17 AS build
 WORKDIR /app
+COPY . .
+RUN mvn clean package
 
-COPY producer/target/producer-1.0-SNAPSHOT.jar /app/producer.jar
-
+# Stage 2: Run the JAR file
+FROM openjdk:17
+COPY --from=build /app/producer/target/producer-1.0-SNAPSHOT.jar /app/producer.jar
+WORKDIR /app
 ENTRYPOINT ["java", "-cp", "/app/producer.jar", "com.bosch.coding.Producer"]
 

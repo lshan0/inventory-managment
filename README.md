@@ -18,18 +18,14 @@ Prerequisites
 
 Setup
 
-    Clone the Repository
+ Clone the Repository
 
-    bash
-
-git clone https://github.com/yourusername/your-repo.git
-cd your-repo
+    git clone https://github.com/yourusername/your-repo.git
+    cd your-repo
 
 Build and Run Docker Containers
 
-Docker Compose is used to manage RabbitMQ and PostgreSQL services.
-
-bash
+ Docker Compose is used to manage RabbitMQ and PostgreSQL services.
 
     docker-compose up --build
 
