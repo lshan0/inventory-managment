@@ -2,3 +2,6 @@
 rabbitmq_data/
 rabbitmq_logs/
 META-INF/
+producer/target
+consumer/target
+utils/target
