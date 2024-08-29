@@ -10,7 +10,7 @@ public class RabbitMQConnectionUtil {
 
     private static final String HOST = System.getenv("HOST");
     private static final String PORT = System.getenv("PORT");
-    private static final String USERNAME = System.getenv("USERNAME");
+    private static final String USER = System.getenv("USER");
     private static final String PASSWORD = System.getenv("PASSWORD");
 
     private static final int CONNECTION_ATTEMPT_COUNT = 10;
@@ -20,7 +20,7 @@ public class RabbitMQConnectionUtil {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost(HOST);
         factory.setPort(Integer.parseInt(PORT));
-        factory.setUsername(USERNAME);
+        factory.setUsername(USER);
         factory.setPassword(PASSWORD);
 
         Connection connection = null;

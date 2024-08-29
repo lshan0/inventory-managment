@@ -38,7 +38,7 @@
                     <archive>
                         <manifest>
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                            <mainClass>com.bosch.coding.Producer</mainClass>
+                            <mainClass>com.bosch.coding.ProducerMain</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

@@ -10,5 +10,5 @@ RUN mvn clean package -DskipTests
 FROM openjdk:17
 COPY --from=build /app/producer/target/producer-1.0-SNAPSHOT.jar /app/producer.jar
 WORKDIR /app
-ENTRYPOINT ["java", "-cp", "/app/producer.jar", "com.bosch.coding.Producer"]
+ENTRYPOINT ["java", "-cp", "/app/producer.jar", "com.bosch.coding.ProducerMain"]
 

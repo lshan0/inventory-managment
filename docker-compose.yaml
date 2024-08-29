@@ -28,13 +28,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.producer
-    depends_on:
-      - rabbitmq
     environment:
       HOST: rabbitmq
       PORT: 5672
-      USERNAME: bosch
+      USER: bosch
       PASSWORD: very_secret
+    depends_on:
+      - rabbitmq
 
   event_consumer:
     build:
@@ -44,7 +44,7 @@ services:
     environment:
       HOST: rabbitmq
       PORT: 5672
-      USERNAME: bosch
+      USER: bosch
       PASSWORD: very_secret
       JDBC_URL: jdbc:postgresql://postgres:5432/inventory_management
     depends_on:

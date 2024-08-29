@@ -100,7 +100,7 @@
                     <archive>
                         <manifest>
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                            <mainClass>com.bosch.coding.Consumer</mainClass>
+                            <mainClass>com.bosch.coding.ConsumerMain</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

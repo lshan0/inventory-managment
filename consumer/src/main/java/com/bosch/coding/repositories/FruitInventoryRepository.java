@@ -1,7 +1,7 @@
 package com.bosch.coding.repositories;
 
-import com.bosch.coding.dto.InventoryRequest;
-import com.bosch.coding.dto.InventoryResponse;
+import com.bosch.coding.dto.InventoryDBRequest;
+import com.bosch.coding.dto.InventoryDBResponse;
 import com.bosch.coding.utils.DBConnectionUtil;
 
 import java.sql.Connection;
@@ -12,11 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-//Rollback
 public class FruitInventoryRepository implements InventoryRepository {
 
     @Override
-    public void addInventory(InventoryRequest inventoryRequest) throws SQLException {
+    public void addInventory(InventoryDBRequest inventoryRequest) throws SQLException {
         String sql = "INSERT INTO inventory (product_name, quantity) VALUES (?, ?)";
 
         try (Connection connection = DBConnectionUtil.getDataSource().getConnection();
@@ -30,7 +29,7 @@ public class FruitInventoryRepository implements InventoryRepository {
     }
 
     @Override
-    public void updateInventory(InventoryRequest inventoryRequest) throws SQLException {
+    public void updateInventory(InventoryDBRequest inventoryRequest) throws SQLException {
         String sql = "UPDATE inventory SET quantity = ? WHERE product_name = ?";
 
         try (Connection connection = DBConnectionUtil.getDataSource().getConnection();
@@ -44,7 +43,7 @@ public class FruitInventoryRepository implements InventoryRepository {
     }
 
     @Override
-    public Optional<InventoryResponse> getInventoryById(int id) throws SQLException {
+    public Optional<InventoryDBResponse> getInventoryById(int id) throws SQLException {
         String sql = "SELECT product_name, quantity FROM inventory WHERE id = ?";
 
         try (Connection connection = DBConnectionUtil.getDataSource().getConnection();
@@ -56,7 +55,7 @@ public class FruitInventoryRepository implements InventoryRepository {
                 if (resultSet.next()) {
                     String name = resultSet.getString("product_name");
                     int quantity = resultSet.getInt("quantity");
-                    return Optional.of(new InventoryResponse(name, quantity));
+                    return Optional.of(new InventoryDBResponse(name, quantity));
                 } else {
                     return Optional.empty(); // Record not found
                 }
@@ -65,9 +64,9 @@ public class FruitInventoryRepository implements InventoryRepository {
     }
 
     @Override
-    public Optional<List<InventoryResponse>> getAllInventories() throws SQLException {
+    public Optional<List<InventoryDBResponse>> getAllInventories() throws SQLException {
         String sql = "SELECT product_name, quantity FROM inventory";
-        List<InventoryResponse> inventories = new ArrayList<>();
+        List<InventoryDBResponse> inventories = new ArrayList<>();
 
         try (Connection connection = DBConnectionUtil.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -76,14 +75,14 @@ public class FruitInventoryRepository implements InventoryRepository {
             while (resultSet.next()) {
                 String name = resultSet.getString("product_name");
                 int quantity = resultSet.getInt("quantity");
-                inventories.add(new InventoryResponse(name, quantity));
+                inventories.add(new InventoryDBResponse(name, quantity));
             }
             return Optional.of(inventories);
         }
     }
 
     @Override
-    public Optional<InventoryResponse> getInventoryByProductName(String productName) throws SQLException {
+    public Optional<InventoryDBResponse> getInventoryByProductName(String productName) throws SQLException {
         String sql = "SELECT product_name, quantity FROM inventory WHERE product_name = ?";
 
         try (Connection connection = DBConnectionUtil.getDataSource().getConnection();
@@ -95,7 +94,7 @@ public class FruitInventoryRepository implements InventoryRepository {
                 if (resultSet.next()) {
                     String name = resultSet.getString("product_name");
                     int quantity = resultSet.getInt("quantity");
-                    return Optional.of(new InventoryResponse(name, quantity));
+                    return Optional.of(new InventoryDBResponse(name, quantity));
                 } else {
                     return Optional.empty(); // Product not found
                 }
