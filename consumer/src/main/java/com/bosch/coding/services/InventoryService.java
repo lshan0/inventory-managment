@@ -3,7 +3,7 @@ package com.bosch.coding.services;
 import com.bosch.coding.dto.ProducerRequest;
 import com.bosch.coding.enums.InventoryItemType;
 import com.bosch.coding.repositories.InventoryRepository;
-import com.bosch.coding.dto.InventoryDBRequest;
+import com.bosch.coding.entity.InventoryDBRequest;
 import com.bosch.coding.dto.InventoryDBResponse;
 import com.bosch.coding.enums.Update;
 import com.bosch.coding.exceptions.InsufficientStockException;

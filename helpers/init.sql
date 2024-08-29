@@ -6,6 +6,8 @@ CREATE DATABASE inventory_management;
 \c inventory_management;
 
 CREATE TABLE inventory (
-    product_name VARCHAR(255) PRIMARY KEY,
-    quantity INT NOT NULL
-)
+    id SERIAL PRIMARY KEY,
+    product_name VARCHAR(255) NOT NULL UNIQUE,
+    quantity INT NOT NULL,
+    version INT NOT NULL
+);

@@ -1,7 +1,7 @@
 package com.bosch.coding.producers;
 
 import com.bosch.coding.dto.ProducerResponse;
-import com.bosch.coding.utils.InventoryItem;
+import com.bosch.coding.entity.InventoryItem;
 import com.bosch.coding.utils.RabbitMQConnectionUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.Channel;

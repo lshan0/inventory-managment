@@ -2,8 +2,8 @@ package com.bosch.coding;
 
 import com.bosch.coding.enums.InventoryItemType;
 import com.bosch.coding.enums.Update;
-import com.bosch.coding.utils.InventoryItem;
-import com.bosch.coding.utils.InventoryRequestEvent;
+import com.bosch.coding.entity.InventoryItem;
+import com.bosch.coding.entity.InventoryRequestEvent;
 import com.bosch.coding.utils.InventoryRequestEventFactory;
 import org.junit.jupiter.api.Test;
 

@@ -2,8 +2,8 @@ package com.bosch.coding;
 
 import com.bosch.coding.producers.Producer;
 import com.bosch.coding.producers.ProducerFactory;
-import com.bosch.coding.utils.InventoryItem;
-import com.bosch.coding.utils.InventoryRequestEvent;
+import com.bosch.coding.entity.InventoryItem;
+import com.bosch.coding.entity.InventoryRequestEvent;
 import com.bosch.coding.utils.InventoryRequestEventFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

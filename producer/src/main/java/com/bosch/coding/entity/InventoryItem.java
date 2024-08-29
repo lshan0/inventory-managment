@@ -1,20 +1,19 @@
-package com.bosch.coding.dto;
+package com.bosch.coding.entity;
 
 import com.bosch.coding.enums.InventoryItemType;
 import com.bosch.coding.enums.Update;
 
-public class InventoryDBRequest {
-
+public class InventoryItem {
     private final String productName;
     private final InventoryItemType type;
     private final int quantity;
-    private final int version;
+    private final Update command;
 
-    private InventoryDBRequest(Builder builder) {
+    private InventoryItem(Builder builder) {
         this.productName = builder.productName;
         this.type = builder.type;
         this.quantity = builder.quantity;
-        this.version = builder.version;
+        this.command = builder.command;
     }
 
     public String getProductName() {
@@ -29,11 +28,15 @@ public class InventoryDBRequest {
         return quantity;
     }
 
+    public Update getCommand() {
+        return command;
+    }
+
     public static class Builder {
         private String productName;
         private InventoryItemType type;
         private int quantity;
-        private int version = 1;
+        private Update command;
 
         public Builder() {
 
@@ -54,14 +57,14 @@ public class InventoryDBRequest {
             return this;
         }
 
-        public Builder withVersion(int version) {
-            this.version = version;
+        public Builder withCommand(Update command) {
+            this.command = command;
             return this;
         }
 
-        // Builds the final InventoryRequest object
-        public InventoryDBRequest build() {
-            return new InventoryDBRequest(this);
+        public InventoryItem build() {
+            return new InventoryItem(this);
         }
     }
 }
+

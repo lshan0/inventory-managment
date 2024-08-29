@@ -1,4 +1,4 @@
-package com.bosch.coding.utils;
+package com.bosch.coding.entity;
 
 import java.util.ArrayList;
 import java.util.List;

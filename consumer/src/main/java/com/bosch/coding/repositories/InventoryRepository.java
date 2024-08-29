@@ -1,6 +1,6 @@
 package com.bosch.coding.repositories;
 
-import com.bosch.coding.dto.InventoryDBRequest;
+import com.bosch.coding.entity.InventoryDBRequest;
 import com.bosch.coding.dto.InventoryDBResponse;
 
 import java.sql.SQLException;

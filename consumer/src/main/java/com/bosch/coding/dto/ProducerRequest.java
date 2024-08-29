@@ -7,4 +7,5 @@ public record ProducerRequest(String productName,
                               InventoryItemType type,
                               Integer quantity,
                               Update command)
-{ }
+{
+}

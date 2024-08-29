@@ -1,7 +1,8 @@
 package com.bosch.coding.repositories;
 
-import com.bosch.coding.dto.InventoryDBRequest;
+import com.bosch.coding.entity.InventoryDBRequest;
 import com.bosch.coding.dto.InventoryDBResponse;
+import com.bosch.coding.enums.InventoryItemType;
 import com.bosch.coding.utils.DBConnectionUtil;
 
 import java.sql.Connection;
@@ -16,13 +17,14 @@ public class FruitInventoryRepository implements InventoryRepository {
 
     @Override
     public void addInventory(InventoryDBRequest inventoryRequest) throws SQLException {
-        String sql = "INSERT INTO inventory (product_name, quantity) VALUES (?, ?)";
+        String sql = "INSERT INTO inventory (product_name, quantity, version) VALUES (?, ?, ?)";
 
         try (Connection connection = DBConnectionUtil.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
-            preparedStatement.setString(1, inventoryRequest.productName());
-            preparedStatement.setInt(2, inventoryRequest.quantity());
+            preparedStatement.setString(1, inventoryRequest.getProductName());
+            preparedStatement.setInt(2, inventoryRequest.getQuantity());
+            preparedStatement.setInt(3, inventoryRequest.getVersion());
 
             preparedStatement.executeUpdate();
         }
@@ -30,21 +32,26 @@ public class FruitInventoryRepository implements InventoryRepository {
 
     @Override
     public void updateInventory(InventoryDBRequest inventoryRequest) throws SQLException {
-        String sql = "UPDATE inventory SET quantity = ? WHERE product_name = ?";
+        String sql = "UPDATE inventory SET quantity = ?, version = ? WHERE product_name = ? AND version = ?";
 
         try (Connection connection = DBConnectionUtil.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
-            preparedStatement.setInt(1, inventoryRequest.quantity());
-            preparedStatement.setString(2, inventoryRequest.productName());
+            preparedStatement.setInt(1, inventoryRequest.getQuantity());
+            preparedStatement.setInt(2, inventoryRequest.getVersion());
+            preparedStatement.setString(3, inventoryRequest.getProductName());
+            preparedStatement.setInt(4, inventoryRequest.getVersion() - 1);  // Check for the previous version
 
-            preparedStatement.executeUpdate();
+            int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new SQLException("Failed to update inventory: version mismatch.");
+            }
         }
     }
 
     @Override
     public Optional<InventoryDBResponse> getInventoryById(int id) throws SQLException {
-        String sql = "SELECT product_name, quantity FROM inventory WHERE id = ?";
+        String sql = "SELECT product_name, quantity, version FROM inventory WHERE id = ?";
 
         try (Connection connection = DBConnectionUtil.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -55,7 +62,8 @@ public class FruitInventoryRepository implements InventoryRepository {
                 if (resultSet.next()) {
                     String name = resultSet.getString("product_name");
                     int quantity = resultSet.getInt("quantity");
-                    return Optional.of(new InventoryDBResponse(name, quantity));
+                    int version = resultSet.getInt("version");
+                    return Optional.of(new InventoryDBResponse(name, quantity, version));
                 } else {
                     return Optional.empty(); // Record not found
                 }
@@ -65,7 +73,7 @@ public class FruitInventoryRepository implements InventoryRepository {
 
     @Override
     public Optional<List<InventoryDBResponse>> getAllInventories() throws SQLException {
-        String sql = "SELECT product_name, quantity FROM inventory";
+        String sql = "SELECT * FROM inventory";
         List<InventoryDBResponse> inventories = new ArrayList<>();
 
         try (Connection connection = DBConnectionUtil.getDataSource().getConnection();
@@ -75,7 +83,8 @@ public class FruitInventoryRepository implements InventoryRepository {
             while (resultSet.next()) {
                 String name = resultSet.getString("product_name");
                 int quantity = resultSet.getInt("quantity");
-                inventories.add(new InventoryDBResponse(name, quantity));
+                int version = resultSet.getInt("version");
+                inventories.add(new InventoryDBResponse(name, quantity, version));
             }
             return Optional.of(inventories);
         }
@@ -83,7 +92,7 @@ public class FruitInventoryRepository implements InventoryRepository {
 
     @Override
     public Optional<InventoryDBResponse> getInventoryByProductName(String productName) throws SQLException {
-        String sql = "SELECT product_name, quantity FROM inventory WHERE product_name = ?";
+        String sql = "SELECT product_name, quantity, version FROM inventory WHERE product_name = ?";
 
         try (Connection connection = DBConnectionUtil.getDataSource().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -94,7 +103,8 @@ public class FruitInventoryRepository implements InventoryRepository {
                 if (resultSet.next()) {
                     String name = resultSet.getString("product_name");
                     int quantity = resultSet.getInt("quantity");
-                    return Optional.of(new InventoryDBResponse(name, quantity));
+                    int version = resultSet.getInt("version");
+                    return Optional.of(new InventoryDBResponse(name, quantity, version));
                 } else {
                     return Optional.empty(); // Product not found
                 }

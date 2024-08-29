@@ -1,16 +1,6 @@
 package com.bosch.coding.producers;
 
-import com.bosch.coding.utils.InventoryItem;
-import com.bosch.coding.utils.RabbitMQConnectionUtil;
-import com.bosch.coding.utils.InventoryRequestEvent;
-import com.bosch.coding.utils.InventoryRequestEventFactory;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.Channel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.nio.charset.StandardCharsets;
+import com.bosch.coding.entity.InventoryItem;
 
 public interface Producer {
 

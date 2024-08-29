@@ -1,5 +1,7 @@
 package com.bosch.coding.utils;
 
+import com.bosch.coding.entity.InventoryItem;
+import com.bosch.coding.entity.InventoryRequestEvent;
 import com.bosch.coding.enums.InventoryItemType;
 import com.bosch.coding.enums.Update;
 
@@ -27,11 +29,14 @@ public class InventoryRequestEventFactory {
 
         for (int i = 0; i < numOfItems; i++) {
             InventoryItemType itemType= getRandomItemType();
-            String itemName = getRandomItem(itemType);
-            int quantity = random.nextInt(5) + 1;
-            Update command = Update.randomEnum();
 
-            InventoryItem item = new InventoryItem(itemName, itemType, quantity, command);
+            InventoryItem item = new InventoryItem.Builder()
+                    .withProductName(getRandomItem(itemType))
+                    .withType(itemType)
+                    .withQuantity(random.nextInt(5) + 1)
+                    .withCommand(Update.randomEnum())
+                    .build();
+
             event.addItem(item);
         }
 
