@@ -22,18 +22,19 @@ public class ConsumerMain {
     private static final String VEGETABLES_ROUTING_KEY = "vegetables_key";
     private static final String VEGETABLES_QUEUE_NAME = "vegetables_queue";
 
-    private static final String QUEUE_TYPE = "direct";
+    private static final String EXCHANGE_TYPE = "direct";
 
     public static void main(String[] args) {
         final InventoryRepository inventoryRepository = new FruitInventoryRepository();
         final InventoryService inventoryService = new InventoryService(inventoryRepository);
 
+        // Separate connections and channel can be created for the consumers
         try (Connection connection = RabbitMQConnectionUtil.establishConnection();
                 final Channel channel = connection.createChannel()) {
 
             // Declare the exchange, queues, and bind them using routing keys
-            channel.exchangeDeclare(FRUITS_EXCHANGE_NAME, QUEUE_TYPE, true);
-            channel.exchangeDeclare(VEGETABLES_EXCHANGE_NAME, QUEUE_TYPE, true);
+            channel.exchangeDeclare(FRUITS_EXCHANGE_NAME, EXCHANGE_TYPE, true);
+            channel.exchangeDeclare(VEGETABLES_EXCHANGE_NAME, EXCHANGE_TYPE, true);
 
             // Fruits Queue
             channel.queueDeclare(FRUITS_QUEUE_NAME, true, false, false, null);

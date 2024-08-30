@@ -12,6 +12,14 @@ public class InventoryRequestEventFactory {
     private static final String[] vegetables = {"Avocado", "Broccoli", "Carrot", "Daiki", "Eggplant", "Fennel", "Ginger", "Horseradish"};
     private static Random random = new Random();
 
+    public static String[] getFruits() {
+        return fruits;
+    }
+
+    public static String[] getVegetables() {
+        return vegetables;
+    }
+
     private static final Map<InventoryItemType, String[]> map = createInventoryMap();
 
     private static Map<InventoryItemType, String[]> createInventoryMap() {
@@ -22,15 +30,15 @@ public class InventoryRequestEventFactory {
     }
 
     public static InventoryRequestEvent createEvent() {
-        InventoryRequestEvent event = new InventoryRequestEvent();
+        final InventoryRequestEvent event = new InventoryRequestEvent();
 
         //Randomly decide the number of items to add
-        int numOfItems = random.nextInt(5) + 1;
+        final int numOfItems = random.nextInt(5) + 1;
 
         for (int i = 0; i < numOfItems; i++) {
-            InventoryItemType itemType= getRandomItemType();
+            final InventoryItemType itemType= getRandomItemType();
 
-            InventoryItem item = new InventoryItem.Builder()
+            final InventoryItem item = new InventoryItem.Builder()
                     .withProductName(getRandomItem(itemType))
                     .withType(itemType)
                     .withQuantity(random.nextInt(5) + 1)
@@ -47,8 +55,8 @@ public class InventoryRequestEventFactory {
         return random.nextBoolean() ? InventoryItemType.FRUIT : InventoryItemType.VEGETABLE;
     }
 
-    private static String getRandomItem(InventoryItemType type) {
-        String[] items = map.get(type);
+    private static String getRandomItem(final InventoryItemType type) {
+        final String[] items = map.get(type);
         return items[random.nextInt(items.length)];
     }
 }

@@ -42,22 +42,22 @@ public class InventoryItem {
 
         }
 
-        public Builder withProductName(String productName) {
+        public Builder withProductName(final String productName) {
             this.productName = productName;
             return this;
         }
 
-        public Builder withType(InventoryItemType type) {
+        public Builder withType(final InventoryItemType type) {
             this.type = type;
             return this;
         }
 
-        public Builder withQuantity(int quantity) {
+        public Builder withQuantity(final int quantity) {
             this.quantity = quantity;
             return this;
         }
 
-        public Builder withCommand(Update command) {
+        public Builder withCommand(final Update command) {
             this.command = command;
             return this;
         }

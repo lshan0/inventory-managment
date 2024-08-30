@@ -6,7 +6,7 @@ import java.util.List;
 public final class InventoryRequestEvent {
     private final List<InventoryItem> inventoryItems;
 
-    public InventoryRequestEvent(List<InventoryItem> inventoryItems) {
+    public InventoryRequestEvent(final List<InventoryItem> inventoryItems) {
         this.inventoryItems = inventoryItems;
     }
 
@@ -18,7 +18,7 @@ public final class InventoryRequestEvent {
         return inventoryItems;
     }
 
-    public void addItem(InventoryItem item) {
+    public void addItem(final InventoryItem item) {
         inventoryItems.add(item);
     }
 }

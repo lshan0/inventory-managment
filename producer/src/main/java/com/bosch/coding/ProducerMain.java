@@ -13,10 +13,10 @@ public class ProducerMain {
 
     public static void main(String[] args) {
         while (true) {
-            InventoryRequestEvent event = InventoryRequestEventFactory.createEvent();
-            for (InventoryItem item : event.getInventoryItems()) {
+            final InventoryRequestEvent event = InventoryRequestEventFactory.createEvent();
+            for (final InventoryItem item : event.getInventoryItems()) {
                 try {
-                    Producer producer = ProducerFactory.getProducer(item.getType());
+                    final Producer producer = ProducerFactory.getProducer(item.getType());
                     producer.startProducing(item);
                 } catch (Exception e) {
                     logger.info("Unexpected error while producer generation: {}", e.getMessage());

@@ -12,15 +12,15 @@ import org.slf4j.LoggerFactory;
 import java.nio.charset.StandardCharsets;
 
 public class VegetableProducer implements Producer {
-    Connection connection;
-    Channel channel;
+    private Connection connection;
+    private Channel channel;
 
     private static final Logger logger = LoggerFactory.getLogger(VegetableProducer.class);
     public static final String EXCHANGE_NAME = "vegetables_exchange";
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final String ROUTING_KEY = "vegetables_key";
     private static final String QUEUE_NAME = "vegetables_queue";
-    private static final String QUEUE_TYPE = "direct";
+    private static final String EXCHANGE_TYPE = "direct";
 
     public VegetableProducer() {
         logger.info("Starting Vegetables Producer");
@@ -35,7 +35,7 @@ public class VegetableProducer implements Producer {
 
     @Override
     public String getQueueType() {
-        return QUEUE_TYPE;
+        return EXCHANGE_TYPE;
     }
 
     @Override
@@ -49,15 +49,15 @@ public class VegetableProducer implements Producer {
     }
 
     @Override
-    public void startProducing(InventoryItem inventoryItem) {
+    public void startProducing(final InventoryItem inventoryItem) {
         try {
             // Declare the exchange, queue and bind them using a routing key
-            channel.exchangeDeclare(EXCHANGE_NAME, QUEUE_TYPE, true);
+            channel.exchangeDeclare(EXCHANGE_NAME, EXCHANGE_TYPE, true);
             channel.queueDeclare(QUEUE_NAME, true, false, false, null);
             channel.queueBind(QUEUE_NAME, EXCHANGE_NAME, ROUTING_KEY);
 
 
-            String message = objectMapper.writeValueAsString(new ProducerResponse(
+            final String message = objectMapper.writeValueAsString(new ProducerResponse(
                     inventoryItem.getProductName(),
                     inventoryItem.getType(),
                     inventoryItem.getQuantity(),
